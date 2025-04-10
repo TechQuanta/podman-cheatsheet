@@ -1,66 +1,182 @@
-# 🐳 Podman Cheat Sheet
+# 💜 DevOps Cheatsheet – Podman, Minikube, Kubernetes, Docker
 
-A comprehensive guide to essential Podman commands.
-
----
-
-## 🚀 Basic Commands
-
-| Task               | Command                        | Description                                      |
-|--------------------|--------------------------------|--------------------------------------------------|
-| Check version      | `podman --version`             | Display Podman version information.              |
-| System info        | `podman info`                  | Show Podman system information.                  |
-| List images        | `podman images`                | List all local container images.                 |
-| Search image       | `podman search <image>`        | Search for an image on remote registries.        |
-| Pull image         | `podman pull <image>`          | Download an image from a registry.               |
-| Remove image       | `podman rmi <image>`           | Delete a local image.                            |
+A complete beginner-friendly Markdown cheatsheet with essential commands, YAML examples, and deployment flow.
 
 ---
 
-## 📦 Container Management
+## 📚 Core Concepts
 
-| Task                 | Command                                  | Description                                      |
-|----------------------|------------------------------------------|--------------------------------------------------|
-| Run container        | `podman run -it <image>`                 | Run a new container interactively.               |
-| List running         | `podman ps`                              | List currently running containers.               |
-| List all             | `podman ps -a`                           | List all containers, including stopped ones.     |
-| Stop container       | `podman stop <container_id>`             | Stop a running container.                        |
-| Remove container     | `podman rm <container_id>`               | Remove a container.                              |
-| View logs            | `podman logs <container_id>`             | Display logs of a container.                     |
-| Execute command      | `podman exec -it <container_id> <cmd>`   | Run a command inside a running container.        |
-
----
-
-## 🛠️ Image Building
-
-| Task                 | Command                                  | Description                                      |
-|----------------------|------------------------------------------|--------------------------------------------------|
-| Build image          | `podman build -t <image_name> .`         | Build an image from a Dockerfile in the current directory. |
-| Tag image            | `podman tag <image> <new_tag>`           | Add a new tag to an existing image.              |
-| Push image           | `podman push <image>`                    | Upload an image to a registry.                   |
+| 📌 Term      | 🧠 Meaning |
+|-------------|------------|
+| **🖼️ Image** | A snapshot of an app and its dependencies. |
+| **📦 Container** | A running instance of an image. |
+| **🧱 Pod** | Smallest deployable unit in Kubernetes. Can hold one or more containers. |
+| **🖥️ Node** | A worker machine in Kubernetes (physical/virtual). |
+| **🧩 Cluster** | A set of nodes managed by Kubernetes. |
+| **🌐 Service** | Exposes pods to the network. |
+| **🛠️ Deployment** | Tells Kubernetes how to deploy and manage pods. |
 
 ---
 
-## 🔧 Volume Management
+## 🐳 Podman Commands
 
-| Task                 | Command                                  | Description                                      |
-|----------------------|------------------------------------------|--------------------------------------------------|
-| Create volume        | `podman volume create <volume_name>`     | Create a new volume.                             |
-| List volumes         | `podman volume ls`                       | List all volumes.                                |
-| Inspect volume       | `podman volume inspect <volume_name>`    | Display detailed information about a volume.     |
-| Remove volume        | `podman volume rm <volume_name>`         | Delete a volume.                                 |
+### 🚀 Basic Commands
+
+```bash
+podman --version                     # Check Podman version
+podman info                          # System info
+podman images                        # List images
+podman search <image>               # Search images
+podman pull <image>                 # Pull image
+podman rmi <image>                  # Remove image
+```
+
+### 📦 Container Management
+
+```bash
+podman run -it <image>              # Run interactive container
+podman run -d -p 8080:80 <image>    # Run web server container (map port)
+podman ps                           # List running containers
+podman ps -a                        # List all containers
+podman stop <container_id>          # Stop container
+podman rm <container_id>            # Remove container
+podman logs <container_id>          # View logs
+podman exec -it <id> <cmd>          # Run command in container
+```
+
+### 🛠️ Build & Push
+
+```bash
+podman build -t myimage .                            # Build image from Dockerfile
+podman tag myimage docker.io/user/myimage:latest     # Tag image for registry
+podman push docker.io/user/myimage:latest            # Push image to Docker Hub
+```
 
 ---
 
-## 🌐 Network Management
+## 📦 Minikube Commands
 
-| Task                 | Command                                  | Description                                      |
-|----------------------|------------------------------------------|--------------------------------------------------|
-| List networks        | `podman network ls`                      | List all networks.                               |
-| Create network       | `podman network create <network_name>`   | Create a new network.                            |
-| Inspect network      | `podman network inspect <network_name>`  | Display detailed information about a network.    |
-| Remove network       | `podman network rm <network_name>`       | Delete a network.                                |
+```bash
+minikube start                                       # Start Minikube cluster
+minikube stop                                        # Stop cluster
+minikube delete                                      # Delete cluster
+minikube status                                      # Show status
+minikube dashboard                                   # Launch dashboard
+minikube service <service-name> --url                # Get NodePort service URL
+```
+
+> 🧰 Use Podman as runtime (optional):
+```bash
+minikube start --driver=podman
+```
 
 ---
 
-*For more detailed information, refer to the [Podman Commands Documentation](https://docs.podman.io/en/stable/Commands.html).*
+## ☸️ Kubernetes Commands
+
+```bash
+kubectl version                                      # Check kubectl version
+kubectl cluster-info                                 # Info about cluster
+kubectl get nodes                                    # Show nodes
+kubectl get pods                                     # Show pods
+kubectl get services                                 # Show services
+kubectl get deployments                              # Show deployments
+kubectl describe pod <pod_name>                      # Describe pod
+kubectl delete pod <pod_name>                        # Delete pod
+kubectl apply -f <file>.yaml                         # Apply YAML file
+kubectl port-forward svc/<service-name> 8080:80      # Port forward to service
+```
+
+---
+
+## 📝 YAML File Examples
+
+### 📄 Deployment YAML
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: mycontainer
+        image: user/myimage:latest
+        ports:
+        - containerPort: 80
+```
+
+Apply:
+```bash
+kubectl apply -f deployment.yaml
+```
+
+### 🌐 Service YAML
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
+spec:
+  selector:
+    app: myapp
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+```
+
+Apply:
+```bash
+kubectl apply -f service.yaml
+```
+
+Get service URL:
+```bash
+minikube service myapp-service --url
+```
+
+---
+
+## 🐋 Docker Image Push
+
+```bash
+docker login
+podman build -t myimage .
+podman tag myimage docker.io/username/myimage:latest
+podman push docker.io/username/myimage:latest
+```
+
+---
+
+## 🔁 DevOps Flow (Quick Map)
+
+```text
+🧑‍💻 Code → 🐋 Dockerfile → 🛠️ Build Image → ✅ Test Locally (Podman) → 📤 Push Image → ☸️ Minikube (K8s) → 📄 YAML → 🚀 Deploy → 🌐 Service → 🌍 Access via NodePort
+```
+
+---
+
+## 🌍 Host This on GitHub Pages
+
+1. 🗂️ Create a GitHub repo named `<username>.github.io`
+2. 📝 Add this file as `index.md`
+3. ⚙️ In repo settings → Pages → Source: `main` branch → `/ (root)`
+4. 🎨 Choose theme (e.g., Cayman or Minimal)
+5. 🔗 Done! Site is live at `https://<username>.github.io`
+
+---
+
+🚀 Happy Shipping from **Tech Quanta** 💜
+
