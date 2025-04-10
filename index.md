@@ -166,17 +166,5 @@ podman push docker.io/username/myimage:latest
 🧑‍💻 Code → 🐋 Dockerfile → 🛠️ Build Image → ✅ Test Locally (Podman) → 📤 Push Image → ☸️ Minikube (K8s) → 📄 YAML → 🚀 Deploy → 🌐 Service → 🌍 Access via NodePort
 ```
 
----
-
-## 🌍 Host This on GitHub Pages
-
-1. 🗂️ Create a GitHub repo named `<username>.github.io`
-2. 📝 Add this file as `index.md`
-3. ⚙️ In repo settings → Pages → Source: `main` branch → `/ (root)`
-4. 🎨 Choose theme (e.g., Cayman or Minimal)
-5. 🔗 Done! Site is live at `https://<username>.github.io`
-
----
-
 🚀 Happy Shipping from **Tech Quanta** 💜
 
